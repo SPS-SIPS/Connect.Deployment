@@ -58,6 +58,21 @@ services:
       - ./.env
     networks:
       - sips-network
+  nginx:
+    image: nginx:latest
+    ports:
+      - "${nginx_port:-9443}:443"
+    volumes:
+      - ./nginx/nginx.conf:/etc/nginx/nginx.conf:ro
+      - ./nginx/certs:/etc/nginx/certs:ro
+    networks:
+      - sips-network
+    depends_on:
+      - sips-connect
+      - idp
+      - grafana
+
+
 volumes:
   grafana_data:
   pg_data:
