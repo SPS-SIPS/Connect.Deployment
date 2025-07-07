@@ -51,11 +51,13 @@ services:
     volumes:
       - grafana_data:/var/lib/grafana
   sips-corebank:
-    image: hanad/sips-consumer:1.0.0
+    image: hanad/sips-consumer:1.0.3-fix
     ports:
       - "${CB_PORT:-9032}:8080"
     env_file:
       - ./.env
+    volumes:
+      - ./db.json:/app/db.json:rw
     networks:
       - sips-network
 volumes:
