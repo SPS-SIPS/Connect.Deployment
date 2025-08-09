@@ -7,46 +7,26 @@ This guide provides a straightforward approach to deploying the SIPS Connect Pla
 1. **Docker**: Ensure Docker is installed on your system. You can download it from [Docker's official website](https://www.docker.com/get-started).
 2. **Docker Compose**: This is typically included with Docker Desktop installations. If you're using Linux, you may need to install it separately. Follow the instructions on [Docker Compose's official documentation](https://docs.docker.com/compose/install/).
 3. **Git**: Ensure Git is installed to clone the repository. You can download it from [Git's official website](https://git-scm.com/downloads).
-4. **Environment Variables**: You will need to set up environment variables for your deployment. Create a `.env` file in the root directory of the project.
 
-## Sample `.env` File
 
-```env
-Serilog__WriteTo__File__Args__path=/logs/log.log
-Serilog__MinimumLevel__Override__Microsoft=Information
-Serilog__MinimumLevel__Override__System=Information
-Serilog__MinimumLevel__Default=Information
+## Important Environment Variables
 
-ASPNETCORE_ENVIRONMENT=Development
+| Variable              | Description                                                      |
+|-----------------------|------------------------------------------------------------------|
+| DB_PASSWORD           | Database password used by Postgres, Keycloak, and SIPS Connect   |
+| HOST_MACHINE_IP       | The IP address of your host machine (used for service URLs)      |
+| KEYCLOAK_KEYSTORE_PASSWORD | Password for Keycloak's PKCS#12 SSL certificate (keycloak.p12) |
+| SIPS_CONNECT_TLS_PFX_PASSWORD | Password for SIPS Connect's PKCS#12 SSL certificate (sips-connect.pfx) |
 
-PGUSER=postgres
-POSTGRES_PASSWORD=<YOUR_DB_PASSWORD>
-POSTGRES_DB=postgres
+## Application Ports
 
-ConnectionStrings__db="Host=sips-connect-db;Database=sips.db.agro;Include Error Detail=True;Username=postgres;Password=<YOUR_DB_PASSWORD>;"
-KC_DB=postgres
-KC_DB_USERNAME=postgres
-KC_DB_PASSWORD=<YOUR_DB_PASSWORD>
-KC_DB_URL="jdbc:postgresql://sips-connect-db/postgres"
-
-Keycloak__Realm__Host="idp:8080"
-Keycloak__Realm__Protocol="http"
-Keycloak__Realm__ValidateIssuer=false
-Keycloak__Realm__Name="mgt"
-Keycloak__Realm__Audience="sc-api"
-Keycloak__Realm__ValidIssuers__0="http://idp:8080"
-Keycloak__Realm__ValidIssuers__1="http://<YOUR_IDP_HOST_IP_Address>:9081"
-
-# Compose Ports:
-SIPS_CONNECT_PORT=9080
-IDP_PORT=9081
-LOKI_PORT=3500
-GRAFANA_PORT=9083
-INSTITUTION_NAME=<YOUR_INSTITUTION_NAME> e.g. "Agro"
-DB_HOST=sips-connect-db
-DB_PORT=5432
-CB_PORT=9082
-```
+| Service         | Default Port (Host:Container) | Description                |
+|-----------------|-------------------------------|----------------------------|
+| SIPS Connect    | 9030:8080 (HTTP), 9443:443 (HTTPS) | Main API service         |
+| Keycloak (IDP)  | 9031:9031 (HTTPS)             | Identity provider (OIDC)   |
+| Grafana         | 9033:3000                     | Monitoring dashboard       |
+| Loki            | 3500:3100                     | Log aggregation            |
+| Corebank        | 9032:8080                     | Example consumer service   |
 
 ## Deployment Steps
 
@@ -60,7 +40,13 @@ CB_PORT=9082
    ```bash
    cd Connect.Deployment
    ```
-3. **Create the `.env` File**: Create a `.env` file in the root directory of the project and populate it with your environment variables as shown above.
+3. **Create the `.env` File**: Copy the provided `.env.example` file to `.env` in the root directory of the project:
+
+   ```bash
+   cp .env.example .env
+   ```
+
+   Then edit the `.env` file and update the variables for your environment. The most important variables are explained at the top of this README.
 4. **Start the Services**: Use Docker Compose to start the services defined in the `docker-compose.yml` file:
    ```bash
    docker-compose up -d
