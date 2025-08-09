@@ -15,6 +15,7 @@ services:
       - ./certs:/certs:ro
       - ./appsettings.json:/app/appsettings.json:rw
       - ./jsonAdapter.json:/app/jsonAdapter.json:rw
+      - ./certs/tls.crt:/usr/local/share/ca-certificates/tls.crt:ro
     networks:
       - sips-network
     entrypoint: ["/bin/sh", "-c", "update-ca-certificates && exec dotnet SIPS.Connect.dll"]
