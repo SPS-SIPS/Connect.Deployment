@@ -40,6 +40,7 @@ Change these variables in your `.env` file to suit your needs.
 To enable HTTPS for Keycloak and the Next.js portal, generate a self-signed certificate and key as follows (replace the IP with your own):
 
 ```sh
+# Remember to update the host ip address in san.cnf
 # 1. Generate a private key
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -config san.cnf -extensions req_ext
 # 2. Convert the key and certificate to a PKCS#12 file (for Keycloak, set your own password)

@@ -13,4 +13,4 @@ subjectAltName = @alt_names
 
 [alt_names]
 DNS.1 = idp
-IP.1 = <10.128.200.244>
+IP.1 = 10.128.200.244
