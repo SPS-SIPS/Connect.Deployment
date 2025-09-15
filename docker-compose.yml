@@ -1,7 +1,7 @@
 name: ${INSTITUTION_NAME:-agro}-sips-connect
 services:
   sips-connect:
-    image: hanad/sips-connect:1.1.1
+    image: hanad/sips-connect:1.1.2
     environment:
       - DB_HOST=${DB_HOST:-sips-connect-db}
       - DB_PORT=5432
@@ -77,17 +77,6 @@ services:
       - sips-network
     volumes:
       - grafana_data:/var/lib/grafana
-  sips-corebank:
-    image: hanad/sips-consumer:1.0.8
-    ports:
-      - "${CB_PORT:-9032}:8080"
-    env_file:
-      - ./.env
-    volumes:
-      - ./db.json:/app/db.json:rw
-      - ./certs:/certs:ro
-    networks:
-      - sips-network
 volumes:
   grafana_data:
   pg_data:
