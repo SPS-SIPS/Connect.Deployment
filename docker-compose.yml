@@ -1,7 +1,7 @@
 name: ${INSTITUTION_NAME:-agro}-sips-connect
 services:
   sips-connect:
-    image: hanad/sips-connect:1.5.2
+    image: hanad/sips-connect:1.5.3
     environment:
       - DB_HOST=${DB_HOST:-sips-connect-db}
       - DB_PORT=5432
@@ -37,6 +37,13 @@ services:
       - ./certs/keycloak.p12:/opt/keycloak/certs/keycloak.p12:ro
     ports:
       - "${IDP_PORT:-9031}:${IDP_PORT:-8443}"
+    networks:
+      - sips-network
+  loki:
+    image: grafana/loki:2.9.7
+    ports:
+      - "3100:3100"
+    command: -config.file=/etc/loki/local-config.yaml
     networks:
       - sips-network
   promtail:
