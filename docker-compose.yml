@@ -83,7 +83,7 @@ services:
       - NEXTJS_TLS_KEY=/app/certs/tls.key
     restart: unless-stopped
     volumes:
-      - ./tls-certs:/app/certs:ro
+      - ./certs:/app/certs:ro
       - ./portal-db/db.json:/app/db.json:rw
     networks:
       - sips-network
