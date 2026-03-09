@@ -86,7 +86,7 @@ services:
       - sips-network
   portal:
     image: abdoulhakim/sips-connect-portal:1.5.5
-    container_name: sips-portal
+    container_name: ${INSTITUTION_NAME:-agro}sips-portal
     ports:
       - "${PORTAL_PORT:-3000}:3000"
     environment:
