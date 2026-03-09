@@ -15,10 +15,17 @@
       },
       "targets": [
         {
-          "expr": "{job=\"sips-connect-logs\"}",
+          "expr": "{job=\"sips-connect-logs\"} | json | line_format \"[{{Level}}] {{MessageTemplate}}\"",
           "refId": "A"
         }
-      ]
+      ],
+      "options": {
+        "showLabels": false,
+        "showTime": true,
+        "wrapLogMessage": true,
+        "sortOrder": "Descending",
+        "enableLogDetails": true
+      }
     },
     {
       "title": "Incoming Transaction Processing Duration (Heatmap)",
