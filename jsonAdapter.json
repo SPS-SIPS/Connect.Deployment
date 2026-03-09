@@ -51,6 +51,11 @@
     "VerificationResponse": {
       "FieldMappings": [
         {
+          "InternalField": "Address",
+          "UserField": "address",
+          "Type": "string"
+        },
+        {
           "InternalField": "IsVerified",
           "UserField": "isVerified",
           "Type": "bool"
@@ -61,12 +66,12 @@
           "Type": "string"
         },
         {
-          "InternalField": "Id",
+          "InternalField": "AccountNo",
           "UserField": "pam",
           "Type": "string"
         },
         {
-          "InternalField": "Type",
+          "InternalField": "AccountType",
           "UserField": "type",
           "Type": "string"
         },
@@ -100,12 +105,12 @@
           "Type": "string"
         },
         {
-          "InternalField": "Id",
+          "InternalField": "AccountNo",
           "UserField": "accountNo",
           "Type": "string"
         },
         {
-          "InternalField": "Type",
+          "InternalField": "AccountType",
           "UserField": "accountType",
           "Type": "string"
         },
@@ -169,6 +174,11 @@
           "Type": "string"
         },
         {
+          "InternalField": "DebtorAddress",
+          "UserField": "drAddress",
+          "Type": "string"
+        },
+        {
           "InternalField": "DebtorAccountType",
           "UserField": "drAccountType",
           "Type": "string"
@@ -186,6 +196,11 @@
         {
           "InternalField": "CreditorAccountType",
           "UserField": "crAccountType",
+          "Type": "string"
+        },
+        {
+          "InternalField": "CreditorAddress",
+          "UserField": "crAddress",
           "Type": "string"
         },
         {
@@ -207,6 +222,16 @@
     },
     "CB_PaymentRequest": {
       "FieldMappings": [
+        {
+          "InternalField": "DebtorAddress",
+          "UserField": "debtorPostalAddress",
+          "Type": "string"
+        },
+        {
+          "InternalField": "CreditorAddress",
+          "UserField": "creditorPostalAddress",
+          "Type": "string"
+        },
         {
           "InternalField": "FromBIC",
           "UserField": "fromBIC",
