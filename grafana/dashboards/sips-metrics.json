@@ -96,9 +96,9 @@
       },
       "targets": [
         {
-          "expr": "sum by (step, type, direction) (rate(sips_processing_step_duration_seconds_sum[$__rate_interval])) / sum by (step, type, direction) (rate(sips_processing_step_duration_seconds_count[$__rate_interval]))",
+          "expr": "sum by (Step, Type, Direction) (rate(sips_transaction_processing_duration_seconds_sum[$__rate_interval])) / sum by (Step, Type, Direction) (rate(sips_transaction_processing_duration_seconds_count[$__rate_interval]))",
           "refId": "A",
-          "legendFormat": "{{direction}} - {{type}} ({{step}})"
+          "legendFormat": "{{Direction}} - {{Type}} ({{Step}})"
         }
       ],
       "fieldConfig": {
@@ -127,9 +127,9 @@
       },
       "targets": [
         {
-          "expr": "sum(rate(sips_processing_step_duration_seconds_count{step=\"Total\"}[$__rate_interval])) by (direction, type)",
+          "expr": "sum(rate(sips_transaction_processing_duration_seconds_count{Step=\"Total\"}[$__rate_interval])) by (Direction, Type)",
           "refId": "A",
-          "legendFormat": "{{direction}} - {{type}}"
+          "legendFormat": "{{Direction}} - {{Type}}"
         }
       ],
       "fieldConfig": {
