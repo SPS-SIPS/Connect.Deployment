@@ -1,6 +1,9 @@
 {
   "title": "SIPS Connect Dashboard",
-  "tags": ["sips", "connect"],
+  "tags": [
+    "sips",
+    "connect"
+  ],
   "timezone": "browser",
   "schemaVersion": 38,
   "refresh": "5s",
@@ -8,7 +11,12 @@
     {
       "title": "SIPS Connect Application Logs",
       "type": "logs",
-      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 12 },
+      "gridPos": {
+        "x": 0,
+        "y": 0,
+        "w": 24,
+        "h": 12
+      },
       "datasource": {
         "uid": "loki_local",
         "type": "loki"
@@ -30,7 +38,12 @@
     {
       "title": "Incoming Transaction Processing Duration (Heatmap)",
       "type": "heatmap",
-      "gridPos": { "x": 0, "y": 12, "w": 12, "h": 10 },
+      "gridPos": {
+        "x": 0,
+        "y": 12,
+        "w": 12,
+        "h": 10
+      },
       "datasource": {
         "uid": "prometheus_local",
         "type": "prometheus"
@@ -50,7 +63,12 @@
     {
       "title": "Average Transaction Processing Duration",
       "type": "timeseries",
-      "gridPos": { "x": 12, "y": 12, "w": 12, "h": 10 },
+      "gridPos": {
+        "x": 12,
+        "y": 12,
+        "w": 12,
+        "h": 10
+      },
       "datasource": {
         "uid": "prometheus_local",
         "type": "prometheus"
@@ -62,6 +80,71 @@
           "legendFormat": "Avg Duration (s)"
         }
       ]
+    },
+    {
+      "title": "Avg Processing Time By internal Step",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 22,
+        "w": 24,
+        "h": 9
+      },
+      "datasource": {
+        "uid": "prometheus_local",
+        "type": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "sum by (step, type, direction) (rate(sips_processing_step_duration_seconds_sum[$__rate_interval])) / sum by (step, type, direction) (rate(sips_processing_step_duration_seconds_count[$__rate_interval]))",
+          "refId": "A",
+          "legendFormat": "{{direction}} - {{type}} ({{step}})"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "s",
+          "custom": {
+            "drawStyle": "line",
+            "lineWidth": 2,
+            "fillOpacity": 10
+          }
+        }
+      }
+    },
+    {
+      "title": "Throughput: Requests per Second",
+      "type": "timeseries",
+      "gridPos": {
+        "x": 0,
+        "y": 31,
+        "w": 24,
+        "h": 8
+      },
+      "datasource": {
+        "uid": "prometheus_local",
+        "type": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(sips_processing_step_duration_seconds_count{step=\"Total\"}[$__rate_interval])) by (direction, type)",
+          "refId": "A",
+          "legendFormat": "{{direction}} - {{type}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "unit": "reqps",
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "stacking": {
+              "mode": "normal",
+              "group": "A"
+            }
+          }
+        }
+      }
     }
   ]
 }
