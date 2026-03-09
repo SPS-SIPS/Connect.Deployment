@@ -1,0 +1,60 @@
+{
+  "title": "SIPS Connect Dashboard",
+  "tags": ["sips", "connect"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "refresh": "5s",
+  "panels": [
+    {
+      "title": "SIPS Connect Application Logs",
+      "type": "logs",
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 12 },
+      "datasource": {
+        "uid": "loki_local",
+        "type": "loki"
+      },
+      "targets": [
+        {
+          "expr": "{job=\"sips-connect-logs\"}",
+          "refId": "A"
+        }
+      ]
+    },
+    {
+      "title": "Incoming Transaction Processing Duration (Heatmap)",
+      "type": "heatmap",
+      "gridPos": { "x": 0, "y": 12, "w": 12, "h": 10 },
+      "datasource": {
+        "uid": "prometheus_local",
+        "type": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "sum(rate(sips_transaction_processing_duration_seconds_bucket[$__rate_interval])) by (le)",
+          "format": "heatmap",
+          "legendFormat": "{{le}}",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "calculate": false
+      }
+    },
+    {
+      "title": "Average Transaction Processing Duration",
+      "type": "timeseries",
+      "gridPos": { "x": 12, "y": 12, "w": 12, "h": 10 },
+      "datasource": {
+        "uid": "prometheus_local",
+        "type": "prometheus"
+      },
+      "targets": [
+        {
+          "expr": "rate(sips_transaction_processing_duration_seconds_sum[$__rate_interval]) / rate(sips_transaction_processing_duration_seconds_count[$__rate_interval])",
+          "refId": "A",
+          "legendFormat": "Avg Duration (s)"
+        }
+      ]
+    }
+  ]
+}

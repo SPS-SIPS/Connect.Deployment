@@ -1,0 +1,13 @@
+global:
+  scrape_interval: 15s  # How often Prometheus will pull data from your app
+scrape_configs:
+  # This is the job that monitors the SIPS Application
+  - job_name: 'sips_api'
+    metrics_path: '/metrics' # The endpoint we exposed in Program.cs
+    
+    # You can add global labels to all data coming from this app
+    static_configs:
+      - targets: ['sips-connect:8080'] # Using Docker Compose service name and port
+        labels:
+          environment: 'production'
+          app: 'sips-core'

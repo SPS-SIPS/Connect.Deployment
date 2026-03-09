@@ -62,6 +62,17 @@ services:
       - sips-network
     volumes:
       - grafana_data:/var/lib/grafana
+      - ./grafana/provisioning:/etc/grafana/provisioning:ro
+      - ./grafana/dashboards:/var/lib/grafana/dashboards:ro
+  prometheus:
+    image: prom/prometheus:v2.51.2
+    ports:
+      - "${PROMETHEUS_PORT:-9090}:9090"
+    volumes:
+      - ./prometheus.yml:/etc/prometheus/prometheus.yml:ro
+      - prometheus_data:/prometheus
+    networks:
+      - sips-network
   sips-corebank:
     image: hanad/sips-consumer:1.1.2
     ports:
@@ -94,6 +105,7 @@ services:
 volumes:
   grafana_data:
   pg_data:
+  prometheus_data:
 
 networks:
   sips-network:
