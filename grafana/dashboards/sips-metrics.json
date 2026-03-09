@@ -15,7 +15,7 @@
       },
       "targets": [
         {
-          "expr": "{job=\"sips-connect-logs\"} | json | line_format \"[{{.Level}}] {{.MessageTemplate}}\"",
+          "expr": "{job=\"sips-connect-logs\"} | json | __error__=\"\" | line_format \"[{{.Level}}] {{.MessageTemplate}}\"",
           "refId": "A"
         }
       ],

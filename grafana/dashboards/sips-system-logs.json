@@ -15,7 +15,7 @@
       },
       "targets": [
         {
-          "expr": "sum by (Level) (count_over_time({job=\"sips-connect-logs\"} | json [$__interval]))",
+          "expr": "sum by (Level) (count_over_time({job=\"sips-connect-logs\"} | json | __error__=\"\" [$__interval]))",
           "refId": "A",
           "legendFormat": "{{Level}}"
         }
@@ -43,7 +43,7 @@
       },
       "targets": [
         {
-          "expr": "{job=\"sips-connect-logs\"} | json",
+          "expr": "{job=\"sips-connect-logs\"} | json | __error__=\"\" | line_format \"[{{.Level}}] {{.MessageTemplate}}\"",
           "refId": "A"
         }
       ],
