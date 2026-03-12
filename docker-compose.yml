@@ -91,18 +91,7 @@ services:
       - prometheus_data:/prometheus
     networks:
       - sips-network
-  sips-corebank:
-    image: hanad/sips-consumer:1.1.2
-    restart: unless-stopped
-    ports:
-      - "${CB_PORT:-9032}:8080"
-    env_file:
-      - ./.env
-    volumes:
-      - ./db.json:/app/db.json:rw
-      - ./certs:/certs:ro
-    networks:
-      - sips-network
+
   portal:
     image: abdoulhakim/sips-connect-portal:1.5.5
     container_name: ${INSTITUTION_NAME:-agro}sips-portal
