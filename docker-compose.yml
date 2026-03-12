@@ -74,7 +74,7 @@ services:
     networks:
       - sips-network
   sips-corebank:
-    image: hanad/sips-consumer:1.1.2
+    image: hanad/sips-consumer:1.1.3
     ports:
       - "${CB_PORT:-9032}:8080"
     env_file:
