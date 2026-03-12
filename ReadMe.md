@@ -33,7 +33,6 @@ You can configure the application ports by changing the corresponding variables 
 | Keycloak (IDP)  | IDP_PORT               | 9031:8443              | Identity provider (OIDC, HTTPS) |
 | Grafana         | GRAFANA_PORT           | 9033:3000              | Monitoring dashboard       |
 | Loki            | LOKI_PORT              | 3500:3100              | Log aggregation            |
-| Corebank        | CB_PORT                | 9032:8080              | Example consumer service   |
 | Portal          | PORTAL_PORT            | 9034:3000              | Next.js Portal application |
 
 Change these variables in your `.env` file to suit your needs.
