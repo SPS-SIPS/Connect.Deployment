@@ -91,7 +91,6 @@ services:
       - prometheus_data:/prometheus
     networks:
       - sips-network
-
   portal:
     image: abdoulhakim/sips-connect-portal:1.5.5
     container_name: ${INSTITUTION_NAME:-agro}sips-portal
