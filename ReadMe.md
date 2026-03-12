@@ -19,6 +19,7 @@ This guide provides a straightforward approach to deploying the SIPS Connect Pla
 | DB_PASSWORD                     | Database password used by Postgres, Keycloak, and SIPS Connect   |
 | KEYCLOAK_KEYSTORE_PASSWORD      | Password for Keycloak's PKCS#12 SSL certificate (keycloak.p12)    |
 | SIPS_CONNECT_TLS_PFX_PASSWORD   | Password for SIPS Connect's PKCS#12 SSL certificate (sips-connect.pfx) |
+| INSTITUTION_NAME                | Name of the institution (e.g., zirat, agro, sps)                 |
 
 **Keep these passwords secure and do not share them publicly.**
 
@@ -28,11 +29,12 @@ You can configure the application ports by changing the corresponding variables 
 
 | Service         | Variable Name           | Default Host:Container | Description                |
 |-----------------|------------------------|------------------------|----------------------------|
-| SIPS Connect    | SIPS_CONNECT_PORT, SIPS_CONNECT_HTTPS_PORT | 9080:8080, 9443:443 | Main API service (HTTP/HTTPS) |
-| Keycloak (IDP)  | IDP_PORT               | 8443:8443              | Identity provider (OIDC, HTTPS) |
-| Grafana         | GRAFANA_PORT           | 9083:3000              | Monitoring dashboard       |
+| SIPS Connect    | SIPS_CONNECT_PORT, SIPS_CONNECT_HTTPS_PORT | 9036:8080, 9030:443 | Main API service (HTTP/HTTPS) |
+| Keycloak (IDP)  | IDP_PORT               | 9031:8443              | Identity provider (OIDC, HTTPS) |
+| Grafana         | GRAFANA_PORT           | 9033:3000              | Monitoring dashboard       |
 | Loki            | LOKI_PORT              | 3500:3100              | Log aggregation            |
-| Corebank        | CB_PORT                | 9082:8080              | Example consumer service   |
+| Corebank        | CB_PORT                | 9032:8080              | Example consumer service   |
+| Portal          | PORTAL_PORT            | 9034:3000              | Next.js Portal application |
 
 Change these variables in your `.env` file to suit your needs.
 ## Generating Self-Signed Certificates for HTTPS
