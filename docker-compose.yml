@@ -102,7 +102,7 @@ services:
     restart: unless-stopped
     volumes:
       - ./certs:/app/certs:ro
-      - ./portal-db/db.json:/app/db.json:rw
+      - ./ui-config/settings.json:/app/db.json:rw
     networks:
       - sips-network
     depends_on:
