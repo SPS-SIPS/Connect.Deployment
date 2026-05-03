@@ -1,0 +1,59 @@
+{
+  "title": "System Logs Dashboard",
+  "tags": ["sips", "logs", "system"],
+  "timezone": "browser",
+  "schemaVersion": 38,
+  "refresh": "5s",
+  "panels": [
+    {
+      "title": "Log Volume by Level",
+      "type": "timeseries",
+      "gridPos": { "x": 0, "y": 0, "w": 24, "h": 7 },
+      "datasource": {
+        "uid": "loki_local",
+        "type": "loki"
+      },
+      "targets": [
+        {
+          "expr": "sum by (Level) (count_over_time({job=\"sips-connect-logs\"} | json | __error__=\"\" [$__interval]))",
+          "refId": "A",
+          "legendFormat": "{{Level}}"
+        }
+      ],
+      "fieldConfig": {
+        "defaults": {
+          "custom": {
+            "drawStyle": "bars",
+            "fillOpacity": 80,
+            "gradientMode": "none",
+            "lineWidth": 1,
+            "spanNulls": false,
+            "stacking": { "mode": "normal", "group": "A" }
+          }
+        }
+      }
+    },
+    {
+      "title": "Recent System Logs (Parsed JSON)",
+      "type": "logs",
+      "gridPos": { "x": 0, "y": 7, "w": 24, "h": 15 },
+      "datasource": {
+        "uid": "loki_local",
+        "type": "loki"
+      },
+      "targets": [
+        {
+          "expr": "{job=\"sips-connect-logs\"} | json | __error__=\"\" | line_format \"[{{.Level}}] {{.MessageTemplate}}\"",
+          "refId": "A"
+        }
+      ],
+      "options": {
+        "showLabels": false,
+        "showTime": true,
+        "wrapLogMessage": true,
+        "sortOrder": "Descending",
+        "enableLogDetails": true
+      }
+    }
+  ]
+}

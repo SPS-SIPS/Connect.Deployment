@@ -19,6 +19,7 @@ This guide provides a straightforward approach to deploying the SIPS Connect Pla
 | DB_PASSWORD                     | Database password used by Postgres, Keycloak, and SIPS Connect   |
 | KEYCLOAK_KEYSTORE_PASSWORD      | Password for Keycloak's PKCS#12 SSL certificate (keycloak.p12)    |
 | SIPS_CONNECT_TLS_PFX_PASSWORD   | Password for SIPS Connect's PKCS#12 SSL certificate (sips-connect.pfx) |
+| INSTITUTION_NAME                | Name of the institution (e.g., zirat, agro, sps)                 |
 
 **Keep these passwords secure and do not share them publicly.**
 
@@ -28,12 +29,13 @@ You can configure the application ports by changing the corresponding variables 
 
 | Service         | Variable Name           | Default Host:Container | Description                |
 |-----------------|------------------------|------------------------|----------------------------|
-| SIPS Connect    | SIPS_CONNECT_PORT, SIPS_CONNECT_HTTPS_PORT | 9080:8080, 9443:443 | Main API service (HTTP/HTTPS) |
-| Keycloak (IDP)  | IDP_PORT               | 8443:8443              | Identity provider (OIDC, HTTPS) |
-| Grafana         | GRAFANA_PORT           | 9083:3000              | Monitoring dashboard       |
+| SIPS Connect    | SIPS_CONNECT_PORT, SIPS_CONNECT_HTTPS_PORT | 9036:8080, 9030:443 | Main API service (HTTP/HTTPS) |
+| Keycloak (IDP)  | IDP_PORT               | 9031:8443              | Identity provider (OIDC, HTTPS) |
+| Grafana         | GRAFANA_PORT           | 9033:3000              | Monitoring dashboard       |
 | Loki            | LOKI_PORT              | 3500:3100              | Log aggregation            |
-| Corebank        | CB_PORT                | 9082:8080              | Example consumer service   |
-****
+| Corebank        | CB_PORT                | 9032:8080              | Example consumer service   |
+| Portal          | PORTAL_PORT            | 9034:3000              | Next.js Portal application |
+
 Change these variables in your `.env` file to suit your needs.
 ## Generating Self-Signed Certificates for HTTPS
 
@@ -45,7 +47,8 @@ To enable HTTPS for Keycloak and the Next.js portal, generate a self-signed cert
 openssl req -x509 -nodes -days 365 -newkey rsa:2048 -keyout tls.key -out tls.crt -config san.cnf -extensions req_ext
 # 2. Convert the key and certificate to a PKCS#12 file (for Keycloak, set your own password)
 openssl pkcs12 -export -in tls.crt -inkey tls.key -out keycloak.p12 -name keycloak -password pass:YOUR_PASSWORD
-# Change the permissions of the keycloak.p12 file
+# Change YOUR_PASSWORD to a secure password
+# Change the permissions of the keycloak.p12 file t
 chmod 644 keycloak.p12
 # 4. Convert the key and certificate to a PFX file (for SIPS Connect, set your own password)
 openssl pkcs12 -export -in tls.crt -inkey tls.key -out sips-connect.pfx -name sips-connect -password pass:YOUR_PASSWORD

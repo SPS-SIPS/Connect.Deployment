@@ -1,0 +1,17 @@
+{
+  "config": {
+    "api": {
+      "baseUrl": ""
+    },
+    "keycloak": {
+      "url": "",
+      "realm": "",
+      "clientId": ""
+    },
+    "profile": "dev",
+    "uiGuards": {
+      "forceFormCompletion": true,
+      "setupConfirmed": false
+    }
+  }
+}
