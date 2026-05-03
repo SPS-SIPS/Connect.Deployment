@@ -19,6 +19,7 @@ Required environment variables:
 
 Optional environment variables:
   DB_PORT       PostgreSQL port. Defaults to 5432
+  LOCK_TIMEOUT  Lock wait for cleanup/index commands. Defaults to 0 (wait forever)
 
 Usage:
   # Preview only, no data changes:
@@ -48,6 +49,7 @@ fi
 
 : "${DB_HOST:?set DB_HOST}"
 : "${DB_PORT:=5432}"
+: "${LOCK_TIMEOUT:=0}"
 : "${DB_NAME:?set DB_NAME}"
 : "${DB_USER:?set DB_USER}"
 : "${DB_PASSWORD:?set DB_PASSWORD}"
@@ -68,6 +70,7 @@ echo "  Host: $DB_HOST"
 echo "  Port: $DB_PORT"
 echo "  Database: $DB_NAME"
 echo "  Username: $DB_USER"
+echo "  Lock timeout: $LOCK_TIMEOUT"
 echo
 
 echo "Equivalent .NET connection string:"
@@ -75,7 +78,7 @@ echo "  Host=$DB_HOST;Port=$DB_PORT;Database=$DB_NAME;Username=$DB_USER;Password
 echo
 
 echo "Running duplicate preview..."
-"${PSQL[@]}" <<'SQL'
+"${PSQL[@]}" --set=lock_timeout="$LOCK_TIMEOUT" <<'SQL'
 \echo 'Duplicate summary'
 
 SELECT 'msgid duplicate groups' AS check, COUNT(*) AS groups
@@ -144,13 +147,13 @@ if [[ "$confirmation" != "APPLY" ]]; then
   exit 1
 fi
 
-"${PSQL[@]}" <<'SQL'
+"${PSQL[@]}" --set=lock_timeout="$LOCK_TIMEOUT" <<'SQL'
 \echo 'Cleaning duplicate ISO messages'
 
 BEGIN;
 
 SET LOCAL statement_timeout = 0;
-SET LOCAL lock_timeout = '30s';
+SET LOCAL lock_timeout = :'lock_timeout';
 
 CREATE TEMP TABLE duplicate_iso_ids (
   id integer PRIMARY KEY
@@ -200,17 +203,21 @@ DELETE FROM isomessages
 WHERE id IN (SELECT id FROM duplicate_iso_ids);
 
 COMMIT;
+SQL
 
-\echo 'Creating unique indexes'
+"${PSQL[@]}" --set=lock_timeout="$LOCK_TIMEOUT" <<'SQL'
+\echo 'Creating unique indexes concurrently'
 
 SET statement_timeout = 0;
-SET lock_timeout = '30s';
+SET lock_timeout = :'lock_timeout';
 
-CREATE UNIQUE INDEX IF NOT EXISTS ux_iso_msg_type_msgid
+DROP INDEX CONCURRENTLY IF EXISTS ux_iso_msg_type_msgid;
+CREATE UNIQUE INDEX CONCURRENTLY ux_iso_msg_type_msgid
 ON isomessages (messagetype, msgid)
 WHERE "msgid" IS NOT NULL AND "msgid" <> '';
 
-CREATE UNIQUE INDEX IF NOT EXISTS ux_iso_msg_type_txid
+DROP INDEX CONCURRENTLY IF EXISTS ux_iso_msg_type_txid;
+CREATE UNIQUE INDEX CONCURRENTLY ux_iso_msg_type_txid
 ON isomessages (messagetype, txid)
 WHERE "txid" IS NOT NULL AND "txid" <> '';
 
