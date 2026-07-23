@@ -13,9 +13,9 @@ services:
       - ISO20022__PayerBankCode=${PAYER_BANK_CODE:-}
       - ISO20022__PayerChannel=${PAYER_CHANNEL:-}
       - Core__CallbackAuthEnabled=${CALLBACK_AUTH_ENABLED:-false}
-      - Core__CallbackTokenEndpoint=${CALLBACK_TOKEN_ENDPOINT:-}
-      - Core__CallbackClientId=${CALLBACK_CLIENT_ID:-}
-      - Core__CallbackClientSecret=${CALLBACK_CLIENT_SECRET:-}
+      - Core__CallbackTokenEndpoint=${P2G_KEYCLOAK_TOKEN_URL:-${CALLBACK_TOKEN_ENDPOINT:-}}
+      - Core__CallbackClientId=${P2G_KEYCLOAK_CLIENT_ID:-${CALLBACK_CLIENT_ID:-}}
+      - Core__CallbackClientSecret=${P2G_KEYCLOAK_CLIENT_SECRET:-${CALLBACK_CLIENT_SECRET:-}}
       - Core__CallbackScope=${CALLBACK_SCOPE:-}
       - Core__CallbackAudience=${CALLBACK_AUDIENCE:-}
     ports:
@@ -45,6 +45,7 @@ services:
       - --hostname-strict=false
       - --http-enabled=false
       - --https-port=${IDP_PORT:-8443}
+      - --hostname=https://${HOST_MACHINE_IP}:${IDP_PORT:-8443}
     volumes:
       - ./realm-config:/opt/keycloak/data/import
       - ./certs/keycloak.p12:/opt/keycloak/certs/keycloak.p12:ro
