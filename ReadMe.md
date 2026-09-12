@@ -35,6 +35,30 @@ You can configure the application ports by changing the corresponding variables 
 | Corebank        | CB_PORT                | 9082:8080              | Example consumer service   |
 
 Change these variables in your `.env` file to suit your needs.
+
+## Backend Callback Mode
+
+SIPS Connect calls one backend callback system per deployment. For the bundled mock CoreBank, keep the default `ISO20022_*_URL` values from `.env.example`.
+
+For P2G UAT, set these values in `.env`:
+
+```env
+ISO20022_VERIFICATION_URL=https://10.128.200.244:8991/api/v1/sips-connect/verify
+ISO20022_TRANSFER_URL=https://10.128.200.244:8991/api/v1/sips-connect/payments/confirm
+ISO20022_RETURN_URL=https://10.128.200.244:8991/api/v1/sips-connect/payments/reverse
+ISO20022_STATUS_URL=https://10.128.200.244:8991/api/v1/sips-connect/payments/status
+ISO20022_COMPLETION_NOTIFICATION_URL=https://10.128.200.244:8991/api/v1/sips-connect/payments/confirm
+
+CALLBACK_AUTH_ENABLED=true
+CALLBACK_TOKEN_ENDPOINT=https://<keycloak-host>/realms/<realm>/protocol/openid-connect/token
+CALLBACK_CLIENT_ID=sips-connect-p2g
+CALLBACK_CLIENT_SECRET=<secret>
+CALLBACK_AUDIENCE=sps-p2g-gateway
+```
+
+The deployment also accepts `P2G_KEYCLOAK_TOKEN_URL`, `P2G_KEYCLOAK_CLIENT_ID`, and `P2G_KEYCLOAK_CLIENT_SECRET` as aliases for the callback token endpoint and client credentials.
+
+The P2G token must include audience `sps-p2g-gateway` and the `p2g-sips-connect` role.
 ## Generating Self-Signed Certificates for HTTPS
 
 To enable HTTPS for Keycloak and the Next.js portal, generate a self-signed certificate and key as follows (replace the IP with your own):
