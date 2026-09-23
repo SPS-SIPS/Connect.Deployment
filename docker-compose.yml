@@ -99,17 +99,19 @@ services:
     networks:
       - sips-network
   portal:
-    image: abdoulhakim/sips-connect-portal:1.5.5
+    image: abdoulhakim/sips-connect-portal:2.0.0
     container_name: ${INSTITUTION_NAME:-agro}sips-portal
     ports:
       - "${PORTAL_PORT:-3000}:3000"
     environment:
       - NEXTJS_TLS_CERT=/app/certs/tls.crt
       - NEXTJS_TLS_KEY=/app/certs/tls.key
+      - SIPS_BACKEND_ALLOW_SELF_SIGNED=true
     restart: unless-stopped
     volumes:
       - ./certs:/app/certs:ro
-      - ./ui-config/settings.json:/app/db.json:rw
+      - ./ui-config/settings.json:/app/app-config.json:rw
+      - ./ui-runtime-config:/app/runtime-config:rw
     networks:
       - sips-network
     depends_on:

@@ -8,7 +8,7 @@
       "realm": "",
       "clientId": ""
     },
-    "profile": "dev",
+    "profile": "uat",
     "uiGuards": {
       "forceFormCompletion": true,
       "setupConfirmed": false
