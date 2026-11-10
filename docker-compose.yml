@@ -2,7 +2,7 @@ name: ${INSTITUTION_NAME:-agro}-sips-connect
 services:
   sips-connect:
     restart: unless-stopped
-    image: hanad/sips-connect:1.6.8
+    image: ghcr.io/sps-sips/sps-connect:2.0.0
     environment:
       - DB_HOST=${DB_HOST:-sips-connect-db}
       - DB_PORT=5432
@@ -33,6 +33,8 @@ services:
       - --hostname-strict=false
       - --http-enabled=false
       - --https-port=${IDP_PORT:-8443}
+      - --hostname=https://${HOST_MACHINE_IP}:${IDP_PORT:-8443}
+      - --hostname-backchannel-dynamic=true
     volumes:
       - ./realm-config:/opt/keycloak/data/import
       - ./certs/keycloak.p12:/opt/keycloak/certs/keycloak.p12:ro
@@ -92,17 +94,19 @@ services:
     networks:
       - sips-network
   portal:
-    image: abdoulhakim/sips-connect-portal:1.5.5
+    image: abdoulhakim/sips-connect-portal:2.0.0
     container_name: ${INSTITUTION_NAME:-agro}sips-portal
     ports:
       - "${PORTAL_PORT:-3000}:3000"
     environment:
       - NEXTJS_TLS_CERT=/app/certs/tls.crt
       - NEXTJS_TLS_KEY=/app/certs/tls.key
+      - SIPS_BACKEND_ALLOW_SELF_SIGNED=true
     restart: unless-stopped
     volumes:
       - ./certs:/app/certs:ro
-      - ./ui-config/settings.json:/app/db.json:rw
+      - ./ui-config/settings.json:/app/app-config.json:rw
+      - ./ui-runtime-config:/app/runtime-config:rw
     networks:
       - sips-network
     depends_on:
