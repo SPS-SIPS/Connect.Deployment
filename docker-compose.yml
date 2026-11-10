@@ -33,6 +33,7 @@ services:
       - --http-enabled=false
       - --https-port=${IDP_PORT:-8443}
       - --hostname=https://${HOST_MACHINE_IP}:${IDP_PORT:-8443}
+      - --hostname-backchannel-dynamic=true
     volumes:
       - ./realm-config:/opt/keycloak/data/import
       - ./certs/keycloak.p12:/opt/keycloak/certs/keycloak.p12:ro
